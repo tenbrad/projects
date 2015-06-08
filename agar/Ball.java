@@ -1,5 +1,3 @@
-//import StdDraw.java;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,78 +6,58 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
 import java.awt.event.*;
-//import javax.swing.*;
-public class Ball extends Circle{
-  private Cell prev;
-  // constructor
+import java.util.ArrayList;
+
+// the ball class runs as the ball controlled by the player mouse
+public class Ball extends Circle {
+  static private ArrayList<Ball> group; // balls in the same group
+  // basic constructor
   public Ball(Board b){
     super(b);
     cover();
-  }
-
-  public void move(Point p,int dir){
-    super.move(p,dir);
-    /*
-    if ( p != null ){
-      uncover();
-      double x = p.getX();
-      double y = p.getY();
-      double angle = Math.atan((y-ry)/(x-rx));
-      if ( ! Double.isNaN(angle) ) {
-        vx = v/radius * Math.cos(angle) *dir;
-        vy = v/radius * Math.sin(angle) *dir;
-        
-        // adjust direction based on cast rule
-        if ( y - ry > 0 && x - rx > 0 ){
-        }
-        else if ( y - ry > 0 && x - rx < 0 ){
-          vx = -vx;
-          vy = -vy;
-        }
-        else if ( y - ry < 0 && x - rx > 0 ){
-        }
-        else if ( y - ry < 0 && x - rx < 0 ){
-          vx = -vx;
-          vy = -vy;
-        }
-      }
-      
-      // if the shortest path is clear
-      if ( board.getGrid().moveable(this,(int)vx,(int)vy) ){
-        // alter x position
-        rx = rx + vx;
-
-        // alter y position
-        ry = ry + vy;
-      // if not, find path around barrier
-      } else { 
-        Cell begin = board.getGrid().getCloseCell((int)rx,(int)ry);
-        Cell end = board.getGrid().getCloseCell(p.getX(),p.getY());
-        if ( begin.getX() != end.getX() || begin.getY() != end.getY() ){
-          Search path = new Search(begin,end,radius,v,board.getGrid());
-          Cell moveTo = path.getDestination();
-          if ( prev != moveTo ){
-            prev = begin;
-            rx = moveTo.getX();
-            ry = moveTo.getY();
-          }
-        }
-      }
-      cover();
-    }
-    */
+    radius = 25;
+    group = new ArrayList<Ball>();
   }
   
-  public void unmove(){
-    rx -= vx;
-    ry -= vy;
+  // constructor meant for splitting ball
+  public Ball(Board b, Ball ball){
+    super(b, ball);
+    cover();
+    group = new ArrayList<Ball>();
   }
 
-/*  public void draw(Graphics g){
-    g.setColor(Color.gray);
-    g.fillOval((int)(rx-radius),(int)(ry-radius),(int)radius*2,(int)radius*2);
+  // method to move the ball on the screen
+  public void move(){
+    // Find mouse position
+    Point p = board.getMousePosition();
+    if ( p != null ){
+      // uncover grid of ball
+      uncover();
+      changeDir(p,v,1);
+      Circle present = board.getGrid().moveable(this,(int)(rx+vx),(int)(ry+vy));
+      // Ball is over the mouse
+      if ( Math.sqrt(vx*vx + vy*vy) < radius/5 ){
+        // do nothing 
+      }
+      // The ball will move into empty space or a ball which is not part of itself
+      else if ( present == null || !group.contains(present) ){
+        rx += vx;
+        ry += vy;
+      }
+      // ball needs to avoid obstacle
+      else {
+        moveAround(p);
+      }
+      // recover grid
+      cover();
+    }
+    
   }
-*/
 }

@@ -20,15 +20,35 @@ public abstract class Circle{
   protected final double tol;
   protected Board board;
   private Cell prev;
-  private Color colour;        // colour
+  protected Color colour;        // colour
   private ArrayList<Cell> covering;
+
+  public Circle(Board b, Ball ball){
+    board = b;
+    Point p = board.getMousePosition();
+    radius = ball.radius/2;
+    rx = ball.rx;
+    ry = ball.ry;
+    changeDir(p,10.0,-1);
+    while (board.getGrid().moveable(this,(int)rx,(int)ry) != null){
+      rx += vx;
+      ry += vy;
+    }
+    vx = 0;
+    vy = 0; 
+    inc = 1;
+    tol = radius/2;
+    v = 600/(radius/5);
+    colour = ball.colour;
+    covering = new ArrayList<Cell>();
+  }
 
   public Circle(Board b){//double x, double y, double r){
     board = b;
     radius = 7.0 + Math.random()*20;
     rx = Math.random()*1000;
     ry = Math.random()*500;
-    while (!board.getGrid().moveable(this,(int)rx,(int)ry)){
+    while (board.getGrid().moveable(this,(int)rx,(int)ry) != null){
       radius = 7.0 + Math.random()*20;
       rx = Math.random()*1000;
       ry = Math.random()*500;
@@ -99,6 +119,28 @@ public abstract class Circle{
   public void move(Point p,int dir){
     if ( p != null ){
       uncover();
+      changeDir(p,v,dir);
+      rx += vx;
+      ry += vy;
+      cover();
+    }
+  }
+
+  protected void moveAround(Point p){
+    Cell begin = board.getGrid().getCloseCell((int)rx,(int)ry);
+    Cell end = board.getGrid().getCloseCell(p.getX(),p.getY());
+    if ( begin.getX() != end.getX() || begin.getY() != end.getY() ){
+      Search path = new Search(begin,end,radius,v,board.getGrid());
+      Cell moveTo = path.getDestination();
+      if ( prev != moveTo ){
+        prev = begin;
+        rx = moveTo.getX();
+        ry = moveTo.getY();
+      }
+    }
+  }
+
+  protected void changeDir(Point p, double v,int dir){
       double x = p.getX();
       double y = p.getY();
       double dx = rx - x;
@@ -128,32 +170,6 @@ public abstract class Circle{
         vx = -vx;
         vy = -vy;
       }
-      
-      // if the shortest path is clear
-      //if ( board.getGrid().moveable(this,(int)(vx+rx),(int)(vy+ry)) ){
-        // alter x position
-        rx = rx + vx;
-
-        // alter y position
-        ry = ry + vy;
-      // if not, find path around barrier
-       // }
-/*      else { 
-        Cell begin = board.getGrid().getCloseCell((int)rx,(int)ry);
-        Cell end = board.getGrid().getCloseCell(p.getX(),p.getY());
-        if ( begin.getX() != end.getX() || begin.getY() != end.getY() ){
-          Search path = new Search(begin,end,radius,v,board.getGrid());
-          Cell moveTo = path.getDestination();
-          if ( prev != moveTo ){
-            prev = begin;
-            rx = moveTo.getX();
-            ry = moveTo.getY();
-          }
-        }
-      }
-*/
-      cover();
-    }
   }
 
   public final boolean isTouching(Circle that){

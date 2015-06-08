@@ -47,18 +47,17 @@ public class Cell{
   public Cell getNeighbour(int i) { return neighbours[i]; }
   public int getNumNeighbours() { return numNeighbours; }
 
-  public boolean isSpace(int cx, int cy, int cr){
+  public Circle isSpace(int cx, int cy, int cr){
     double distance = Math.sqrt((cx-x)*(cx-x) + (cy-y)*(cy-y));
-    if (distance > cr +1) return true;
-    if (cover) return !cover;
-    boolean space = true;
+    if (distance > cr +1) return null;
+    if (cover) return covering;
+    Circle c = null;
     checked = true;
-    for (int i = 0; i < numNeighbours && space; ++i){
+    for (int i = 0; i < numNeighbours && c == null ; ++i){
       if ( !neighbours[i].checked )
-        space = space && neighbours[i].isSpace(cx,cy,cr);
+        c = neighbours[i].isSpace(cx,cy,cr);
     }
-//    if (!space) System.out.println("no space");
-    return space;
+    return c;
   }
 
   public void uncheck(int cx,int cy,int cr){

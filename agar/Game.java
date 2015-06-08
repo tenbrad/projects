@@ -2,13 +2,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-
+// basic class to create and run game
 public class Game extends JFrame {
     
-    boolean over;
-
     public Game() {
-        over = false;
         initUI();
     }
 
@@ -17,8 +14,6 @@ public class Game extends JFrame {
         Board b = new Board(1000,500);
         add(b);
         
-        over = b.gameOver();
-
         setSize(1000, 500);
         setResizable(false);
 

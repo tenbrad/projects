@@ -8,33 +8,34 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.*;
 import java.awt.event.*;
-//import javax.swing.*;
 
 public class Barrier extends Circle {
   private Point goal;
-  // constructor
 
-  public Barrier(Board b){
+  // constructor
+  public Barrier(Board b,int ballSize){
     super(b);
-    setRadius(5.0 + Math.random()*25); 
+    double updateRad = ballSize + Math.random()*50 - 25;
+    while ( updateRad < 3 ){
+      updateRad = ballSize + Math.random()*40 - 25;
+    }
+    setRadius(updateRad); 
     cover();
     v /=2;
     goal = null;
   }
-  
-/*  public void draw(Graphics g){
-    g.setColor(Color.red);
-    g.fillOval((int)(rx-radius),(int)(ry-radius),(int)radius*2,(int)radius*2);
-  }*/
 
   public void move(){
+    // if there is no goal, make one
     if ( goal == null ){
       goal = board.getGrid().getRandomPoint(); 
-//      goal = new Point(temp.getX(), temp.getY());
     }
+    // call super class move method
     super.move(goal,1);
-    if ( Math.abs(rx - goal.getX()) < v/2 && Math.abs(ry - goal.getY()) < v/2 ){
-      goal = null;
+    // if the barrier is close to the goal, set goal to null
+    if ( Math.abs(rx - goal.getX()) < v &&
+         Math.abs(ry - goal.getY()) < v ){
+            goal = null;
     }
   }
 }

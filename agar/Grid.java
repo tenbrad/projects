@@ -67,13 +67,13 @@ public class Grid{
     return points[cx][cy];
   }
 
-  public boolean moveable(Circle c,int x, int y){
+  public Circle moveable(Circle c,int x, int y){
     int cx = (int)(c.getX());
     int cy = (int)(c.getY());
     int cr = (int) c.getRadius();
-    boolean space = points[x/gridSize][y/gridSize].isSpace(x,y,cr);
+    Circle temp = points[x/gridSize][y/gridSize].isSpace(x,y,cr);
     points[x/gridSize][y/gridSize].uncheck(x,y,cr);
-    return space;
+    return temp;
   }
 
   public void cover(Circle c, boolean covering){

@@ -137,9 +137,9 @@ public class Search{
       closeList.add(current);
       Search s = searches.get(current);
       
-      boolean space = current.isSpace(current.getX(),current.getY(),r);
+      Circle space = current.isSpace(current.getX(),current.getY(),r);
       current.uncheck(current.getX(),current.getY(),r);
-      if ( space ){
+      if ( space == null ){
         // if the end has been reached, mark it
         if ( current.getX() == end.getX() && current.getY() == end.getY() ) {
           moveTo = s;
