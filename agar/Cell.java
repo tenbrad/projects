@@ -40,6 +40,7 @@ public class Cell{
   public int getActual() { return actual; }
   public int getX() { return x; }
   public int getY() { return y; }
+  public Circle getCovering() { return covering; }
   public Cell getNeighbour(int i) { return neighbours[i]; }
   public int getNumNeighbours() { return numNeighbours; }
   

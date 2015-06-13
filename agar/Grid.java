@@ -99,10 +99,10 @@ public class Grid{
   public void draw(Graphics g){
     for (int i = 0; i < lon; i += 3){
       for (int j = 0; j < lat; j += 3){
-        if ( points[i][j].isCovered() )
-          g.setColor(Color.red);
-        else g.setColor(Color.black);
-        g.fillOval(i*gridSize,j*gridSize,3,3);
+        if ( points[i][j].isCovered() ){
+          g.setColor(points[i][j].getCovering().getColour());
+          g.fillOval(i*gridSize,j*gridSize,3,3);
+        }
       }
     }
     g.setColor(Color.gray);

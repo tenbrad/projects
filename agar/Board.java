@@ -102,7 +102,7 @@ public class Board extends JPanel implements ActionListener {
         for (int i = 0; i < numBarriers; ++i){
           wall.get(i).draw(g);
         }
-       //grid.draw(g);
+       grid.draw(g);
     }
 
     
@@ -150,22 +150,30 @@ public class Board extends JPanel implements ActionListener {
 
     // method to run consumption when two balls touch
     private boolean consume(Circle c, Circle d){
+      c.uncover();
+      d.uncover();
       boolean consumed = c.consume(d);
       Circle ballConsumed;
-      if ( consumed ) ballConsumed = d;
-      else ballConsumed = c;
+      if ( consumed ){
+        ballConsumed = d;
+//        c.cover();
+      }
+      else {
+        ballConsumed = c;
+//        d.cover();
+      }
       if ( isWall(ballConsumed) ){
         wall.remove(ballConsumed);
-        ballConsumed.uncover();
         --numBarriers;
       } else {
         --numBalls;
         balls.remove(ballConsumed);
-        ballConsumed.uncover();
         if ( numBalls == 0 ){
           gameover = true;
         }
       }
+      System.out.println(numBalls);
+      System.out.println(numBarriers); 
       return consumed;
     }
 
@@ -193,10 +201,10 @@ public class Board extends JPanel implements ActionListener {
       // redraw the board
       repaint();
       // if the player has no balls, give game over message
-      if ( gameover ){
+/*      if ( gameover ){
         gameOverMessage();
       }
-    }
+*/    }
 
     private void gameOverMessage(){
       timer.stop();

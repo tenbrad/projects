@@ -67,7 +67,7 @@ public abstract class Circle{
   public double getX() { return rx; }
   public double getY() { return ry; }
   public double getRadius() { return radius; }
-
+  public Color getColour() { return colour; }
   protected void setRadius(double r) { radius = r; }
 
   public boolean consume(Circle c){

@@ -42,12 +42,8 @@ public class Ball extends Circle {
       uncover();
       changeDir(p,v,1);
       Circle present = board.getGrid().moveable(this,(int)(rx+vx),(int)(ry+vy));
-      // Ball is over the mouse
-      if ( Math.sqrt(vx*vx + vy*vy) < radius/5 ){
-        // do nothing 
-      }
       // The ball will move into empty space or a ball which is not part of itself
-      else if ( present == null || !group.contains(present) ){
+      if ( present == null || !group.contains(present) ){
         rx += vx;
         ry += vy;
       }
@@ -55,7 +51,7 @@ public class Ball extends Circle {
       else {
         moveAround(p);
       }
-      // recover grid
+      // re-cover grid
       cover();
     }
     
