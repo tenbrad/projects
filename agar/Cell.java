@@ -22,7 +22,10 @@ public class Cell{
     numNeighbours = 0;
     cover = false;
     checked = false;
-    
+    total = 0;
+    cost = 0;
+    estimate = 0;
+    actual = 0; 
   }
 
   // method to add a neighbour of this cell
@@ -54,6 +57,14 @@ public class Cell{
   public void setCover(boolean cover) { this.cover = cover; }
   public boolean isCovered() { return cover; }
 
+  // resets the fields associated with searching
+  public void reset(){
+    total = 0;
+    cost = 0;
+    estimate = 0;
+    actual = 0;  
+  }
+  
   // checks if there is space for a circle with radius cr at (cx,cy)
   //    returns null if there is space
   //    returns the circle covering otherwise 
