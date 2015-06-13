@@ -1,6 +1,7 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JApplet;
 
 // basic class to create and run game
 public class Game extends JFrame {

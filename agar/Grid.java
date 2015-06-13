@@ -8,11 +8,15 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 
+// class to control the area the balls are on
+//  specically used for determining collisions easily
 public class Grid{
+  // fields
   private Cell points[][];
   private int gridSize;
   private int lat, lon;
 
+  // constructor
   Grid(int width, int height){
     gridSize = 4;
     lat = height/gridSize + 1;
@@ -40,6 +44,7 @@ public class Grid{
     }
   }
 
+  // getters/setters/checkers
   public boolean isCovered(int x, int y){
     return points[x][y].isCovered();
   }
@@ -51,6 +56,7 @@ public class Grid{
 
   public int getGridSize() { return gridSize; }
 
+  // method to return a random point on the grid
   public Point getRandomPoint(){
     Point p = null;
     while ( p == null ){
@@ -60,13 +66,17 @@ public class Grid{
     }
     return p;
   }
-
+  
+  // method to return a cell which is close to the postion requested
   public Cell getCloseCell(double x, double y){
     int cx = (int)(x/gridSize);
     int cy = (int)(y/gridSize);
     return points[cx][cy];
   }
 
+  // check to see if there is space for c at location (x,y)
+  //   if there is, return null
+  //   otherwise, return the Circle blocking the move
   public Circle moveable(Circle c,int x, int y){
     int cx = (int)(c.getX());
     int cy = (int)(c.getY());
@@ -76,14 +86,16 @@ public class Grid{
     return temp;
   }
 
+  // cover or uncover the space covered by Circle c
   public void cover(Circle c, boolean covering){
     int cx = (int)(c.getX());
     int cy = (int)(c.getY());
     int cr = (int) c.getRadius();
-//    points[cx/gridSize][cy/gridSize].setCover(covering);
     points[cx/gridSize][cy/gridSize].cover(covering,c,cx,cy,cr);
   }
 
+  // the grid drawn with points to represent cells
+  //    red cells are covered, black cells are not covered
   public void draw(Graphics g){
     for (int i = 0; i < lon; i += 3){
       for (int j = 0; j < lat; j += 3){

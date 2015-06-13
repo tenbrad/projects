@@ -65,8 +65,8 @@ public class Board extends JPanel implements ActionListener {
       balls = new ArrayList<Ball>();
       for (int i = 0; i < numBalls; ++i){
         balls.add(new Ball(this));
-        updateBallSize();
       }
+      updateBallSize();
       for (int i = 0; i < numBarriers; ++i){
         wall.add(new Barrier(this,ballSize));
       }
@@ -77,6 +77,13 @@ public class Board extends JPanel implements ActionListener {
     private void addBarriers(){
       wall.add(new Barrier(this,ballSize));
       ++numBarriers;
+    }
+
+    // add ball and update number of balls and total ball size
+    private void addBalls(){
+      balls.add(new Ball(this));
+      ++numBalls;
+      updateBallSize();
     }
 
     private void updateBallSize(){
